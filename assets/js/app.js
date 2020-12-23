@@ -34,6 +34,7 @@ function GravityEngine(players) {
 
     for (var key in players) {
         players[key].y += (gravity * players[key].peso);
+        players[key].energy += (gravity * players[key].peso)
     }
 
 }
@@ -49,8 +50,9 @@ function SceneColision(players) {
 
         if (distance <= players[key].radius) {
             // collision detected!
-            console.log();
+            console.log(players[key].energy);
             players[key].y = sceneHeight - players[key].radius;
+            players[key].energy = 0;
         }
     }
 
