@@ -4,7 +4,10 @@ var context = canvas.getContext('2d');
 
 
 
-const players = [{ id: 1, x: 0, y: 0, radius: 15, color: '#000FFF', peso: 10, energy: 0 }, { id: 2, x: 30, y: 28, radius: 15, color: '#000000', peso: 5, energy: 0 }]
+const players = [
+    { id: 1, x: 0, y: 0, radius: 15, color: '#000FFF', peso: 10, energy: 0.00, bounce: 0.5, collision: '' },
+    { id: 2, x: 30, y: 28, radius: 15, color: '#000000', peso: 5, energy: 0.00, bounce: 0.5, collision: '' }
+]
 
 var gravity = 0.2;
 var sceneHeight = 500;
@@ -19,7 +22,7 @@ function DrawScene() {
 
     for (var key in players) {
 
-        
+
         GravityEngine(players);
         SceneColision(players);
 
@@ -33,8 +36,33 @@ function DrawScene() {
 function GravityEngine(players) {
 
     for (var key in players) {
-        players[key].y += (gravity * players[key].peso);
-        players[key].energy += (gravity * players[key].peso)
+
+        if(players[key].collision == '' || players[key].energy <= 0.00)
+        {
+            players[key].y += (gravity * players[key].peso);
+            players[key].energy += (gravity * players[key].peso)
+            players[key].collision = '';
+
+        }
+
+        if(players[key].collision == 'Bottom' && players[key].energy >= 0.00)
+        {
+            players[key].y -= (gravity * ((players[key].peso)));
+            players[key].energy -= (gravity * players[key].peso)
+            console.log((gravity * (players[key].peso)), players[key].energy);
+        }
+
+
+        // if (players[key].energy == 0.00) {
+        //     players[key].y += (gravity * players[key].peso);
+        //     players[key].energy += (gravity * players[key].peso)
+        // }
+        // else {
+        //     players[key].y -= (players[key].energy * players[key].peso);
+        //     //players[key].energy = players[key].energy - (players[key].energy * players[key].peso)
+        //     console.log(players[key].energy);
+        // }
+
     }
 
 }
@@ -45,14 +73,24 @@ function SceneColision(players) {
 
         var dx = sceneWidth - players[key].x;
         var dy = sceneHeight - players[key].y;
-    
-        var distance = Math.sqrt( dy * dy);
 
-        if (distance <= players[key].radius) {
+        var distance_y = Math.sqrt(dy * dy);
+
+        if (distance_y <= players[key].radius) {
             // collision detected!
-            console.log(players[key].energy);
+
+            players[key].collision = 'Bottom'
+            players[key].energy = ((players[key].bounce * 100) * players[key].energy) / 100;
+
             players[key].y = sceneHeight - players[key].radius;
-            players[key].energy = 0;
+
+            // var i;
+            // for (i = 0.00; i < players[key].energy; i++) {
+            //     players[key].y = players[key].energy - i;
+            //     console.log(players[key].energy - i);
+            // }
+            // console.log(players[key].energy);
+            //players[key].energy = 0;
         }
     }
 
