@@ -47,9 +47,19 @@ function GravityEngine(players) {
 
         if(players[key].collision == 'Bottom' && players[key].energy >= 0.00)
         {
-            players[key].y -= (gravity * ((players[key].peso)));
-            players[key].energy -= (gravity * players[key].peso)
-            console.log((gravity * (players[key].peso)), players[key].energy);
+            var objweight;
+            
+            if(players[key].energy >= 0.99){
+                objweight = players[key].peso;
+            }
+            else{
+                objweight = ((players[key].energy * 100) * players[key].peso) / 100;
+                console.log(objweight);
+            }
+            
+            players[key].y -= (gravity * objweight);
+            players[key].energy -= (gravity * objweight)
+            
         }
 
 
